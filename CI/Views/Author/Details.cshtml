@@ -1,0 +1,53 @@
+﻿@model CI.Models.Author
+@using CI.Services
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<div class="page-header center">
+  <h1>@Model.Name</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-5">
+        @if (!String.IsNullOrEmpty(Model.Image))
+{
+    <img src="@Url.Content(String.Concat("~/_uploads/images/",Model.Image))" alt="image" style="float: left" />
+}
+else
+{
+    <img src="@Url.Content("~/_uploads/images/noimage.jpg")" alt="image" style="float: left" />
+}
+    </div>
+    <div class="col-md-7">
+        @if (Model.Files.Count > 0)
+        {
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 65%">Название</th>
+                    <th style="width: 10%">Год</th>
+                    <th style="width: 25%">Жанр</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Files) {
+                    @Html.Partial("~/Views/Shared/_ShowAudiofileList.cshtml", item)
+                }
+            </tbody>
+        </table>
+        }
+        else
+        {
+            <p>Файлы данного автора/исполнителя не найдены</p>
+        }
+    </div>
+</div>
+
+@*@Html.Partial("~/Views/Shared/_ShowAudiofileList.cshtml")*@
+
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>*@

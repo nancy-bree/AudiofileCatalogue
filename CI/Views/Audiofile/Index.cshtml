@@ -1,0 +1,64 @@
+﻿@model PagedList.IPagedList<CI.Models.Audiofile>
+@using PagedList.Mvc
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Аудиофайлы";
+}
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/audiojs/audio.min.js")"></script>
+<script>
+    audiojs.events.ready(function () {
+        var as = audiojs.createAll();
+    });
+</script>
+
+<div class="page-header center">
+  <h1>Аудиофайлы</h1>
+</div>
+
+@*@foreach (var audiofile in Model.AudiofilePaths)
+{ 
+    @Url.Content(System.Text.RegularExpressions.Regex.Replace(audiofile, @"\\", @"/"))
+    <div>
+        <audio preload="none" type="audio/mpeg">
+            <source src="@Url.Content(String.Concat("~/_uploads/audio/", audiofile))">
+        </audio>
+    </div>
+}*@
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 40%">Название</th>
+            <th style="width: 35%">Автор</th>
+            <th style="width: 15%">Жанр</th>
+            <th style="width: 10%">Год</th>
+            @*<th></th>*@
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID})
+            </td>
+            <td>
+                @Html.ActionLink(item.Author.Name, "Details", "Author", new { id = item.ID}, null)
+            </td>
+            <td>
+                @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.ID}, null)
+            </td>
+            <td>
+                @Html.DisplayFor(x => item.Year)
+            </td>
+            @*<td>
+                <audio src="@Url.Content(String.Concat("~/_uploads/audio/", item.Filename))" preload="none" type="audio/mpeg"/>
+            </td>*@
+        </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new RouteValueDictionary {{"page", page }}), PagedListRenderOptions.Classic)

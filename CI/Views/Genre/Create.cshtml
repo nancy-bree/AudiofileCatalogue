@@ -1,0 +1,22 @@
+﻿@model CI.Models.Genre
+
+@{
+    ViewBag.Title = "Добавить жанр";
+}
+
+<div class="page-header center">
+  <h1>Добавить автора/исполнителя</h1>
+</div>
+
+@using (Html.BeginForm("Create", "Genre", FormMethod.Post, new { role = "form", @class = "col-md-6", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control"})
+        @Html.ValidationMessageFor(m => m.Name) 
+    </div>
+    <input type="submit" value="Добавить" class="btn btn-default" /> 
+    
+}

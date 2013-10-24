@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Каталог аудиофайлов";
+}
+
+<p>
+    @Html.ActionLink("Список всех аудиофайлов", "Index", "Audiofile")<br />
+    @Html.ActionLink("Добавить аудиофайл", "UploadAudiofile", "Audiofile")<br />
+    @Html.ActionLink("Добавить автора/исполнителя", "Create", "Author")<br />
+    @Html.ActionLink("Добавить жанр", "Create", "Genre")<br />
+</p>
+
+<em>P.S. "Вход" и "Регистрация" пока не работают. Как и нет проверки на добавление одинаковых файлов/авторов/жанров.</em>

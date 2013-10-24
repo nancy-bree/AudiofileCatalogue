@@ -1,0 +1,26 @@
+﻿@model CI.Models.Audiofile
+
+<script type="text/javascript" src="@Url.Content("~/Scripts/audiojs/audio.min.js")"></script>
+<script>
+    audiojs.events.ready(function () {
+        var as = audiojs.createAll();
+    });
+</script>
+
+<div class="page-header center">
+  <h1>@ViewBag.Title</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-6">
+        <p><b>Название:</b> @Html.DisplayFor(item => Model.Title)</p>
+        <p><b>Год:</b> @Html.DisplayFor(item => Model.Year)</p>
+        <p><b>Автор/Исполнитель:</b> @Html.ActionLink(Model.Author.Name, "Details", "Author", new { id = Model.AuthorID}, null)</p>
+        <p><b>Жанр:</b> @Html.ActionLink(Model.Genre.Name, "Details", "Genre", new { id = Model.GenreID}, null)</p>
+        @if (!String.IsNullOrEmpty(Model.Description))
+        {
+            <p><b>Описание:</b> @Html.DisplayFor(item => Model.Description)</p>
+        }
+    </div>
+    <div class="col-md-6"><audio src="@Url.Content(String.Concat("~/_uploads/audio/", Model.Filename))" preload="none" type="audio/mpeg"/></div>
+</div>
