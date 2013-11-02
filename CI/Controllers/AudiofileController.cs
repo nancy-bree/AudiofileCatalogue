@@ -9,6 +9,7 @@ using CI.ViewModels;
 using CI.Services;
 using System.Data;
 using PagedList;
+using CI.Properties;
 
 namespace CI.Controllers
 {
@@ -20,7 +21,7 @@ namespace CI.Controllers
 
         public ActionResult Index(int? page)
         {
-            int pageSize = 3;
+            int pageSize = Settings.Default.ItemsPerPage;
             int pageNumber = (page ?? 1);
             return View(unitOfWork.AudiofileRepository.Get(orderBy: x => x.OrderBy(y => y.Title)).ToPagedList(pageNumber, pageSize));
         }
@@ -74,7 +75,7 @@ namespace CI.Controllers
 
         public ActionResult SearchResults(string searchString, int? page)
         {
-            int pageSize = 2;
+            int pageSize = Settings.Default.ItemsPerPage;
             int pageNumber = (page ?? 1);
 
             var result = unitOfWork.AudiofileRepository.Get();

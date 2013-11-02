@@ -16,6 +16,18 @@ namespace CI
             routes.IgnoreRoute("{*favicon}", new { favicon = @"(.*/)?favicon.ico(/.*)?" });
 
             routes.MapRoute(
+                name: "1",
+                url: "Authors",
+                defaults: new { controller = "Author", action = "Index" }
+            );
+
+            routes.MapRoute(
+                name: "x",
+                url: "Genres",
+                defaults: new { controller = "Genre", action = "Index" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}",
                 defaults: new { controller = "Home", action = "Index" }

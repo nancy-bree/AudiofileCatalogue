@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.IO;
 using CI.Properties;
+using System.Web.Helpers;
 
 namespace CI.Services
 {
@@ -21,7 +22,9 @@ namespace CI.Services
                     break;
                 case "image/jpeg":
                     path = GetImagePath(filename);
-                    file.SaveAs(path);
+                    SaveImage(file, path);
+                    /*file.SaveAs(path);*/
+
                     break;
             }
             return filename;
@@ -35,6 +38,19 @@ namespace CI.Services
         private static string GetImagePath(string filename)
         {
             return Path.Combine(HttpContext.Current.Server.MapPath(Settings.Default.AuthorImagePath), filename);
+        }
+
+        private static void SaveImage(HttpPostedFileBase file, string filename)
+        {
+            WebImage img = new WebImage(file.InputStream);
+            if (img.Width > Settings.Default.MaxAuthorImageWidth)
+            {
+                int newWidth = Settings.Default.MaxAuthorImageWidth;
+                float aspectRatio = (float)img.Width / (float)img.Height;
+                int newHeight = Convert.ToInt32(newWidth / aspectRatio);
+                img.Resize(newWidth, newHeight);
+                img.Save(filename);
+            }
         }
     }
 }

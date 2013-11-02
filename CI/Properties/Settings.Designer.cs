@@ -40,5 +40,23 @@ namespace CI.Properties {
                 return ((string)(this["AuthorImagePath"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int ItemsPerPage {
+            get {
+                return ((int)(this["ItemsPerPage"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("400")]
+        public int MaxAuthorImageWidth {
+            get {
+                return ((int)(this["MaxAuthorImageWidth"]));
+            }
+        }
     }
 }

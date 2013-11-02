@@ -8,5 +8,11 @@
     <Setting Name="AuthorImagePath" Type="System.String" Scope="Application">
       <Value Profile="(Default)">~\_uploads\images\</Value>
     </Setting>
+    <Setting Name="ItemsPerPage" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
+    </Setting>
+    <Setting Name="MaxAuthorImageWidth" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">400</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

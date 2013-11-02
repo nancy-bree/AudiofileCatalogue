@@ -7,6 +7,7 @@ using CI.Models;
 using CI.DAL;
 using System.Data;
 using PagedList;
+using CI.Properties;
 
 namespace CI.Controllers
 {
@@ -18,7 +19,7 @@ namespace CI.Controllers
 
         public ActionResult Index(int? page)
         {
-            int pageSize = 3;
+            int pageSize = Settings.Default.ItemsPerPage;
             int pageNumber = (page ?? 1);
             return View(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)).ToPagedList(pageNumber, pageSize));
         }

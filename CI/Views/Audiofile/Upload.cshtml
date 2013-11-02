@@ -8,7 +8,7 @@
   <h1>Загрузить аудиофайл</h1>
 </div>
 
-@using (Html.BeginForm("UploadAudiofile", "Audiofile", FormMethod.Post, new { role = "form", @class = "col-md-6", enctype = "multipart/form-data" }))
+@using (Html.BeginForm("Upload", "Audiofile", FormMethod.Post, new { role = "form", @class = "col-md-6", enctype = "multipart/form-data" }))
 {
     @Html.ValidationSummary(true)
     @Html.AntiForgeryToken()
