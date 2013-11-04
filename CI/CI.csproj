@@ -133,15 +133,6 @@
     <Compile Include="Controllers\GenreController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="DAL\AuthorRepository.cs" />
-    <Compile Include="DAL\CIContext.cs" />
-    <Compile Include="DAL\GenreRepository.cs" />
-    <Compile Include="DAL\AudiofileRepository.cs" />
-    <Compile Include="DAL\IUnitOfWork.cs" />
-    <Compile Include="DAL\RatingRepository.cs" />
-    <Compile Include="DAL\Repository.cs" />
-    <Compile Include="DAL\UnitOfWork.cs" />
-    <Compile Include="DAL\UserRepository.cs" />
     <Compile Include="Migrations\201310092157200_RemoveSurnameRequiredField.cs" />
     <Compile Include="Migrations\201310092157200_RemoveSurnameRequiredField.Designer.cs">
       <DependentUpon>201310092157200_RemoveSurnameRequiredField.cs</DependentUpon>
@@ -175,11 +166,6 @@
       <DependentUpon>201310092050011_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Author.cs" />
-    <Compile Include="Models\Genre.cs" />
-    <Compile Include="Models\Audiofile.cs" />
-    <Compile Include="Models\Rating.cs" />
-    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -239,6 +225,7 @@
   <ItemGroup>
     <Folder Include="App_Data\audio\" />
     <Folder Include="App_Data\images\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -292,6 +279,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Audiofile\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CI.DAL\CI.DAL.csproj">
+      <Project>{7fa7a3b3-9e4b-42d7-9872-668115fd5f82}</Project>
+      <Name>CI.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CI.Entities\CI.Entities.csproj">
+      <Project>{2c696bba-1ba5-4f06-b2be-c5860408e724}</Project>
+      <Name>CI.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

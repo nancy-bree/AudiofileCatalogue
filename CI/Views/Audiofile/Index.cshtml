@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<CI.Models.Audiofile>
+﻿@model PagedList.IPagedList<CI.Entities.Audiofile>
 @using PagedList.Mvc
 
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
@@ -15,7 +15,7 @@
 </script>
 
 <div class="page-header center">
-  <h1>Аудиофайлы</h1>
+  <h1>@ViewBag.Title</h1>
 </div>
 
 @*@foreach (var audiofile in Model.AudiofilePaths)

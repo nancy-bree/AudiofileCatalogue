@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using CI.Models;
+using CI.Entities;
 using CI.DAL;
 using CI.ViewModels;
 using CI.Services;

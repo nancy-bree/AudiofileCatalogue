@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CI.Models
+namespace CI.Entities
 {
     public class Rating
     {

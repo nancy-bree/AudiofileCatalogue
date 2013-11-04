@@ -1,5 +1,4 @@
-﻿using System;
-using CI.Models;
+﻿using CI.Entities;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 

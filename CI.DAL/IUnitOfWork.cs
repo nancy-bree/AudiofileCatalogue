@@ -1,5 +1,4 @@
 ﻿using System;
-using CI.DAL;
 
 namespace CI.DAL
 {

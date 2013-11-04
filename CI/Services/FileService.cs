@@ -48,7 +48,7 @@ namespace CI.Services
                 int newWidth = Settings.Default.MaxAuthorImageWidth;
                 float aspectRatio = (float)img.Width / (float)img.Height;
                 int newHeight = Convert.ToInt32(newWidth / aspectRatio);
-                img.Resize(newWidth, newHeight);
+                img.Resize(newWidth, newHeight).Crop(1, 1);
                 img.Save(filename);
             }
         }

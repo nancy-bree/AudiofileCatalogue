@@ -4,7 +4,7 @@ namespace CI.Migrations
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
-    using CI.Models;
+    using CI.Entities;
 
     internal sealed class Configuration : DbMigrationsConfiguration<CI.DAL.CIContext>
     {

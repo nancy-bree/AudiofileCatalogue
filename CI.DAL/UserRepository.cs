@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CI.Models;
+﻿using CI.Entities;
 
 namespace CI.DAL
 {
