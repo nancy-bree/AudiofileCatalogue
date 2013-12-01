@@ -33,8 +33,8 @@ namespace CI.ViewModels
         public String Description { get; set; }
 
         [Required(ErrorMessage = "Выберите файл")]
-        //[FileSize(102400000)]
-        //[FileTypes("mp3")]
+        [FileSize(40960000)]
+        [FileTypes("mp3")]
         [DisplayName("Файл")]
         public HttpPostedFileBase File { get; set; }
     }

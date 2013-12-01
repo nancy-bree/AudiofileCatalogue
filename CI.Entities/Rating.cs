@@ -6,8 +6,13 @@ namespace CI.Entities
     {
         [Key]
         public int ID { get; set; }
+
         public int AudiofileID { get; set; }
+
         public int UserID { get; set; }
-        public byte Vote { get; set; }
+
+        public virtual Audiofile Audiofile { get; set; }
+
+        public virtual User User { get; set; }
     }
 }

@@ -22,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -51,6 +52,41 @@
     <Compile Include="CIContext.cs" />
     <Compile Include="GenreRepository.cs" />
     <Compile Include="IUnitOfWork.cs" />
+    <Compile Include="Migrations\201310092050011_InitialCreate.cs" />
+    <Compile Include="Migrations\201310092050011_InitialCreate.Designer.cs" />
+    <Compile Include="Migrations\201310092157200_RemoveSurnameRequiredField.cs" />
+    <Compile Include="Migrations\201310092157200_RemoveSurnameRequiredField.Designer.cs" />
+    <Compile Include="Migrations\201310201554522_ChangeAuthorTable.cs" />
+    <Compile Include="Migrations\201310201554522_ChangeAuthorTable.Designer.cs" />
+    <Compile Include="Migrations\201310201653015_New.cs" />
+    <Compile Include="Migrations\201310201653015_New.Designer.cs" />
+    <Compile Include="Migrations\201310201658038_New1.cs" />
+    <Compile Include="Migrations\201310201658038_New1.Designer.cs" />
+    <Compile Include="Migrations\201310201701401_New2.cs" />
+    <Compile Include="Migrations\201310201701401_New2.Designer.cs" />
+    <Compile Include="Migrations\201310202137121_AddImageFieldToAuthorEntity.cs" />
+    <Compile Include="Migrations\201310202137121_AddImageFieldToAuthorEntity.Designer.cs" />
+    <Compile Include="Migrations\201311171017104_Test.cs" />
+    <Compile Include="Migrations\201311171017104_Test.Designer.cs">
+      <DependentUpon>201311171017104_Test.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311171029026_Test2.cs" />
+    <Compile Include="Migrations\201311171029026_Test2.Designer.cs">
+      <DependentUpon>201311171029026_Test2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201311171040116_RemovePasswordColumnFromUserTable.cs" />
+    <Compile Include="Migrations\201311171040116_RemovePasswordColumnFromUserTable.Designer.cs">
+      <DependentUpon>201311171040116_RemovePasswordColumnFromUserTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201312011852416_UpdateRatingTable.cs" />
+    <Compile Include="Migrations\201312011852416_UpdateRatingTable.Designer.cs">
+      <DependentUpon>201312011852416_UpdateRatingTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201312011902374_UpdateRatingTable2.cs" />
+    <Compile Include="Migrations\201312011902374_UpdateRatingTable2.Designer.cs">
+      <DependentUpon>201312011902374_UpdateRatingTable2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingRepository.cs" />
     <Compile Include="Repository.cs" />
@@ -66,6 +102,30 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201310092050011_InitialCreate.resx" />
+    <EmbeddedResource Include="Migrations\201310092157200_RemoveSurnameRequiredField.resx" />
+    <EmbeddedResource Include="Migrations\201310201554522_ChangeAuthorTable.resx" />
+    <EmbeddedResource Include="Migrations\201310201653015_New.resx" />
+    <EmbeddedResource Include="Migrations\201310201658038_New1.resx" />
+    <EmbeddedResource Include="Migrations\201310201701401_New2.resx" />
+    <EmbeddedResource Include="Migrations\201310202137121_AddImageFieldToAuthorEntity.resx" />
+    <EmbeddedResource Include="Migrations\201311171017104_Test.resx">
+      <DependentUpon>201311171017104_Test.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311171029026_Test2.resx">
+      <DependentUpon>201311171029026_Test2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201311171040116_RemovePasswordColumnFromUserTable.resx">
+      <DependentUpon>201311171040116_RemovePasswordColumnFromUserTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312011852416_UpdateRatingTable.resx">
+      <DependentUpon>201312011852416_UpdateRatingTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201312011902374_UpdateRatingTable2.resx">
+      <DependentUpon>201312011902374_UpdateRatingTable2.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

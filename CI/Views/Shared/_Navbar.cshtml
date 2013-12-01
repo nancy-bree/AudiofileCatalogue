@@ -1,23 +1,52 @@
 ﻿<div class="navbar navbar-default navbar-fixed-top">
-        <div class="container">
-          <div class="navbar-header">
+    <div class="container">
+        <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
             </button>
             @Html.ActionLink("Каталог аудиофайлов", "Index", "Home", null, new { @class = "navbar-brand"})
-          </div>
-          <div class="collapse navbar-collapse">
+        </div>
+        <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-              <li>@Html.ActionLink("Авторы", "Index", "Author")</li>
-              <li>@Html.ActionLink("Жанры", "Index", "Genre")</li>
+                <li>@Html.ActionLink("Аудиофайлы", "Index", "Audiofile")</li>
+                <li>@Html.ActionLink("Авторы", "Index", "Author")</li>
+                <li>@Html.ActionLink("Жанры", "Index", "Genre")</li>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                {
+                    <li class="dropdown">
+                        <a id="drop1" href="#" role="button" data-toggle="dropdown">
+                            Администратор<b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby = "drop1">
+                            <li>@Html.ActionLink("Добавить автора", "Create", "Author")</li>
+                            <li>@Html.ActionLink("Управление авторами", "Authors", "Admin")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Добавить аудиофайл", "Upload", "Audiofile")</li>
+                            <li>@Html.ActionLink("Управление аудиофайлами", "Audiofiles", "Admin")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Добавить жанр", "Create", "Genre")</li>
+                            <li>@Html.ActionLink("Управление жанрами", "Genres", "Admin")</li>
+                            <li class="divider"></li>
+                            <li>@Html.ActionLink("Управление пользователями", "Users", "Admin")</li>
+                        </ul>
+                    </li>
+                }
             </ul>
             @Html.Partial("~/Views/Shared/_SearchBar.cshtml")
-              <ul class="nav navbar-nav ">
-                <li>@Html.ActionLink("Вход", "LogOn", "Account")</li>
-                 <li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
+            <ul class="nav navbar-nav navbar-right ">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Привет, " + @User.Identity.Name, "Manage", "Account")</li>
+                    <li>@Html.ActionLink("Выход", "Logoff", "Account")</li>
+                }
+                else
+                {
+                    <li>@Html.ActionLink("Регистрация", "Register", "Account")</li>
+                    <li>@Html.ActionLink("Вход", "Login", "Account")</li>
+                }
             </ul>
-          </div><!--/.nav-collapse -->
-        </div>
+        </div><!--/.nav-collapse -->
+    </div>
 </div>

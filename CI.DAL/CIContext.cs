@@ -14,6 +14,14 @@ namespace CI.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Audiofile>()
+                .HasMany(x => x.Votes)
+                .WithRequired(x => x.Audiofile);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Votes)
+                .WithRequired(x => x.User);
+
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
     }

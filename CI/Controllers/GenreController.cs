@@ -11,29 +11,27 @@ using CI.Properties;
 
 namespace CI.Controllers
 {
+    [HandleError]
     public class GenreController : Controller
     {
         private IUnitOfWork unitOfWork = new UnitOfWork();
         //
         // GET: /Genre/
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int page = 1)
         {
-            int pageSize = Settings.Default.ItemsPerPage;
-            int pageNumber = (page ?? 1);
-            return View(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)).ToPagedList(pageNumber, pageSize));
+            return View(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)).ToPagedList(page, Settings.Default.ItemsPerPage));
         }
 
-        public ActionResult Details(int? page, int id = 1)
+        public ActionResult Details(int page = 1, int id = 1)
         {
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
             ViewBag.Title = unitOfWork.GenreRepository.GetByID(id).Name;
             ViewBag.GenreID = id;
             var list = unitOfWork.AudiofileRepository.Get().Where(x => x.GenreID == id);
-            return View(list.ToPagedList(pageNumber, pageSize));
+            return View(list.ToPagedList(page, Settings.Default.ItemsPerPage));
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -47,17 +45,78 @@ namespace CI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.GenreRepository.Insert(genre);
-                    unitOfWork.Save();
+                    AddGenre(genre);
                     return RedirectToAction("Index");
                 }
             }
             catch (DataException)
             {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                ModelState.AddModelError("", "Не удалось сохранить изменения. Повторите попытку.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("",
+                    "Такой жанр уже содержится в базе.");
             }
             return View(genre);
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int id)
+        {
+            return View(unitOfWork.GenreRepository.GetByID(id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Genre genre)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EditGenre(genre);
+                    return RedirectToAction("Genres", "Admin");
+                }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("", "Не удалось сохранить изменения. Повторите попытку.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("",
+                    "Такой жанр уже содержится в базе.");
+            }
+            return View(genre);
+        }
+
+        #region tmp
+        private void AddGenre(Genre genre)
+        {
+            if (IsExist(genre))
+            {
+                throw new Exception();
+            }
+            unitOfWork.GenreRepository.Insert(genre);
+            unitOfWork.Save();
+        }
+
+        private bool IsExist(Genre genre)
+        {
+            bool exist = unitOfWork.GenreRepository.Get().FirstOrDefault(
+                x => x.Name.ToUpper() == genre.Name.ToUpper()) != null;
+            return exist;
+        }
+
+        private void EditGenre(Genre genre)
+        {
+            var genreToUpdate = unitOfWork.GenreRepository.GetByID(genre.ID);
+            genreToUpdate.Name = genre.Name;
+            unitOfWork.GenreRepository.Update(genreToUpdate);
+            unitOfWork.Save();
+        }
+
+        #endregion
     }
 }

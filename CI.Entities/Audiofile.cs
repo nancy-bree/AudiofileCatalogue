@@ -38,5 +38,7 @@ namespace CI.Entities
 
         public virtual Author Author { get; set; }
         public virtual Genre Genre { get; set; }
+
+        public virtual ICollection<Rating> Votes { get; set; }
     }
 }

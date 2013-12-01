@@ -1,0 +1,135 @@
+﻿@model PagedList.IPagedList<CI.Entities.User>
+@using PagedList.Mvc
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Управление пользователями";
+}
+
+<div class="page-header center">
+  <h1>@ViewBag.Title</h1>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="width: 50%">Пользователь</th>
+            <th style="width: 50%">Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Username
+            </td>
+            <td id="@item.ID" data-username="@item.Username">
+                @if (item.ID != WebSecurity.CurrentUserId)
+                    {
+                        <div>
+                        @if (Roles.GetRolesForUser(item.Username).Contains("Administrator"))
+                        {
+                            @Html.ActionLink("Исключить из Администраторов", "ChangeUserRole", "User"
+                                , null
+                                , new Dictionary<string, object>() {{"class", "adminBtn excludeFromAdmins btn btn-sm btn-danger"}, {"role", "button"}}) 
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Сделать Администратором", "ChangeUserRole", "User"
+                                , null
+                                , new Dictionary<string, object>() {{"class", "adminBtn addToAdmins btn btn-sm btn-success"}, {"role", "button"}}) 
+                        }
+                        @Html.ActionLink("Удалить", "Delete", "User"
+                            , new {username = item.Username}, new {@class = "deleteBtn btn btn-sm btn-info", role = "button"})
+                        </div>
+                    }
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Users", new RouteValueDictionary {{"page", page }}), PagedListRenderOptions.Classic)
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/themes/base/jquery-ui.css")" />
+<script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.min.js")"></script>
+
+<script>
+    $(function () {
+        $(".adminBtn").click(function (e) {
+            e.preventDefault();
+            self = $(this);
+            pid = $(this).parent().parent().attr("id");
+            username = $(this).parent().parent().data("username");
+            if ($(this).hasClass("excludeFromAdmins")) {
+                $.ajax({
+                    type: "POST",
+                    url: $(".adminBtn").attr("href"),
+                    data: { username: username, act: "exclude" },
+                    success: function () {
+                        self.removeClass("excludeFromAdmins")
+                            .removeClass("btn-danger")
+                            .addClass("addToAdmins")
+                            .addClass("btn-success")
+                            .text("Сделать администратором");
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: $(".adminBtn").attr("href"),
+                    data: { username: username, act: "add" },
+                    success: function () {
+                        self.removeClass("addToAdmins")
+                            .removeClass("btn-success")
+                            .addClass("excludeFromAdmins")
+                            .addClass("btn-danger")
+                            .text("Исключить из Администраторов");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        $(".deleteBtn").click(function (e) {
+            e.preventDefault();
+            pid = $(this).parent().parent().attr("id");
+            username = $(this).parent().parent().data("username");
+            $('#dialog-confirm').dialog('open');
+        });
+        $("#dialog-confirm").dialog({
+            open: function (event) {
+                $(".ui-dialog-titlebar-close").hide();
+                $(".ui-dialog-title").hide();
+            },
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            buttons: {
+                "OK": function () {
+                    deleteRecord(username);
+                    $("td#" + pid).parent().fadeOut("slow").remove();
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        function deleteRecord(username) {
+            $.ajax({
+                type: "POST",
+                url: $(".deleteBtn").attr("href"),
+                data: { username: username }
+            });
+        };
+    });
+</script>
+
+<div id="dialog-confirm">Вы действительно хотите удалить данного пользователя?</div>

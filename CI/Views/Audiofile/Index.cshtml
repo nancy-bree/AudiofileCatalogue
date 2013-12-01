@@ -18,16 +18,6 @@
   <h1>@ViewBag.Title</h1>
 </div>
 
-@*@foreach (var audiofile in Model.AudiofilePaths)
-{ 
-    @Url.Content(System.Text.RegularExpressions.Regex.Replace(audiofile, @"\\", @"/"))
-    <div>
-        <audio preload="none" type="audio/mpeg">
-            <source src="@Url.Content(String.Concat("~/_uploads/audio/", audiofile))">
-        </audio>
-    </div>
-}*@
-
 <table class="table">
     <thead>
         <tr>
@@ -45,10 +35,10 @@
                 @Html.ActionLink(item.Title, "Details", new { id = item.ID})
             </td>
             <td>
-                @Html.ActionLink(item.Author.Name, "Details", "Author", new { id = item.ID}, null)
+                @Html.ActionLink(item.Author.Name, "Details", "Author", new { id = item.AuthorID}, null)
             </td>
             <td>
-                @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.ID}, null)
+                @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.GenreID}, null)
             </td>
             <td>
                 @Html.DisplayFor(x => item.Year)

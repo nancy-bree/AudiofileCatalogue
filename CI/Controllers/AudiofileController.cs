@@ -13,17 +13,16 @@ using CI.Properties;
 
 namespace CI.Controllers
 {
+    [HandleError]
     public class AudiofileController : Controller
     {
-        private IUnitOfWork unitOfWork = new UnitOfWork();
+        private readonly IUnitOfWork unitOfWork = new UnitOfWork();
         //
         // GET: /AudioFile/
 
-        public ActionResult Index(int? page)
+        public ActionResult Index(int page = 1)
         {
-            int pageSize = Settings.Default.ItemsPerPage;
-            int pageNumber = (page ?? 1);
-            return View(unitOfWork.AudiofileRepository.Get(orderBy: x => x.OrderBy(y => y.Title)).ToPagedList(pageNumber, pageSize));
+            return View(unitOfWork.AudiofileRepository.Get(orderBy: x => x.OrderBy(y => y.Title)).ToPagedList(page, Settings.Default.ItemsPerPage));
         }
 
         public ActionResult Details(int id = 1)
@@ -33,6 +32,7 @@ namespace CI.Controllers
             return View(audiofile);
         }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult Upload()
         {
             ViewBag.AuthorID = new SelectList(unitOfWork.AuthorRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
@@ -42,51 +42,137 @@ namespace CI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Upload(AudiofileUploadViewModel viewmodel)
+        public ActionResult Upload(AudiofileUploadViewModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    Audiofile audiofile = new Audiofile
-                    {
-                        Title = viewmodel.Name,
-                        AuthorID = viewmodel.AuthorID,
-                        GenreID = viewmodel.GenreID,
-                        Year = viewmodel.Year,
-                        Description = viewmodel.Description,
-                        Filename = FileService.SaveFile(viewmodel.File)
-                    };
-
-                    unitOfWork.AudiofileRepository.Insert(audiofile);
-                    unitOfWork.Save();
+                    AddAudiofile(model);
                     return RedirectToAction("Index");
                 }
             }
-            catch(DataException)
+            catch (DataException)
             {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
+                ModelState.AddModelError("",
+                    "Не удалось сохранить изменения. Повторите попытку.");
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError("",
+                    "Файл, который вы пытаетесь добавить уже содержится в базе.");
             }
             ViewBag.AuthorID = new SelectList(unitOfWork.AuthorRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
             ViewBag.GenreID = new SelectList(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
             
-            return View(viewmodel);
+            return View(model);
         }
 
-        public ActionResult SearchResults(string searchString, int? page)
+        [Authorize(Roles = "Admin")]
+        public ActionResult Edit(int id)
         {
-            int pageSize = Settings.Default.ItemsPerPage;
-            int pageNumber = (page ?? 1);
+            ViewBag.AuthorID = new SelectList(unitOfWork.AuthorRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
+            ViewBag.GenreID = new SelectList(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
+            return View(unitOfWork.AudiofileRepository.GetByID(id));
+        }
 
-            var result = unitOfWork.AudiofileRepository.Get();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(Audiofile model)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    EditAudiofile(model);
+                    return RedirectToAction("Audiofiles", "Admin");
+                }
+            }
+            catch (DataException)
+            {
+                ModelState.AddModelError("",
+                    "Не удалось сохранить изменения. Повторите попытку.");
+            }
+            ViewBag.AuthorID = new SelectList(unitOfWork.AuthorRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
+            ViewBag.GenreID = new SelectList(unitOfWork.GenreRepository.Get(orderBy: x => x.OrderBy(y => y.Name)), "ID", "Name");
 
-            if (!string.IsNullOrEmpty(searchString))
+            return View(model);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public JsonResult Delete(int id)
+        {
+            DeleteAudiofile(id);
+            return Json(new {success = true});
+        }
+
+        public ActionResult SearchResults(string searchString, int page = 1)
+        {
+            var result = new List<Audiofile>();
+
+            if (!string.IsNullOrWhiteSpace(searchString))
             {
                 ViewBag.Title = searchString;
-                result = result.Where(x => x.Title.ToUpper().Contains(searchString.ToUpper())).OrderBy(x => x.Title);
+                result = unitOfWork.AudiofileRepository.Get().Where(x => x.Title.ToUpper().Contains(searchString.ToUpper())).OrderBy(x => x.Title).ToList();
             }
-            return View(result.ToPagedList(pageNumber, pageSize));
+            return View(result.ToPagedList(page, Settings.Default.ItemsPerPage));
         }
 
+        #region tmp
+        private void AddAudiofile(AudiofileUploadViewModel model)
+        {
+            Audiofile audiofile = new Audiofile
+            {
+                Title = model.Name,
+                AuthorID = model.AuthorID,
+                GenreID = model.GenreID,
+                Year = model.Year,
+                Description = model.Description,
+                Filename = FileService.SaveFile(model.File)
+            };
+            bool exist = unitOfWork.AudiofileRepository.Get().FirstOrDefault(
+                x => x.Title.ToUpper() == audiofile.Title.ToUpper() &&
+                x.AuthorID == audiofile.AuthorID &&
+                x.GenreID == audiofile.GenreID &&
+                x.Year == audiofile.Year &&
+                x.Description.ToUpper() == audiofile.Description.ToUpper() ) != null;
+            if (exist)
+            {
+                throw new Exception();
+            }
+            unitOfWork.AudiofileRepository.Insert(audiofile);
+            unitOfWork.Save();
+        }
+
+        private void EditAudiofile(Audiofile model)
+        {
+            var audiofileToUpdate = unitOfWork.AudiofileRepository.GetByID(model.ID);
+            audiofileToUpdate.Title = model.Title;
+            audiofileToUpdate.Genre = unitOfWork.GenreRepository.GetByID(model.GenreID);
+            audiofileToUpdate.Author = unitOfWork.AuthorRepository.GetByID(model.AuthorID);
+            audiofileToUpdate.Description = model.Description;
+            audiofileToUpdate.Year = model.Year;
+            unitOfWork.AudiofileRepository.Update(audiofileToUpdate);
+            unitOfWork.Save();
+        }
+
+        private void DeleteAudiofile(int id)
+        {
+            var audiofileToDelete = unitOfWork.AudiofileRepository.GetByID(id);
+            var files = System.IO.Directory.GetFiles(Server
+                .MapPath(Settings.Default.AudiofilePath), audiofileToDelete.Filename);
+            foreach (var file in files)
+            {
+                if (System.IO.File.Exists(file))
+                {
+                    System.IO.File.Delete(file);
+                }
+            }
+            unitOfWork.AudiofileRepository.Delete(audiofileToDelete);
+            unitOfWork.Save();
+        }
+
+        #endregion
     }
 }

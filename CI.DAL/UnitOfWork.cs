@@ -4,7 +4,7 @@ namespace CI.DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private CIContext _context = new CIContext();
+        private readonly CIContext _context = new CIContext();
         private AuthorRepository _authorRepository;
         private GenreRepository _genreRepository;
         private AudiofileRepository _audiofileRepository;
@@ -13,62 +13,27 @@ namespace CI.DAL
 
         public AuthorRepository AuthorRepository
         {
-            get
-            {
-                if (_authorRepository == null)
-                {
-                    _authorRepository = new AuthorRepository(_context);
-                }
-                return _authorRepository;
-            }
+            get { return _authorRepository ?? (_authorRepository = new AuthorRepository(_context)); }
         }
 
         public GenreRepository GenreRepository
         {
-            get
-            {
-                if (_genreRepository == null)
-                {
-                    _genreRepository = new GenreRepository(_context);
-                }
-                return _genreRepository;
-            }
+            get { return _genreRepository ?? (_genreRepository = new GenreRepository(_context)); }
         }
 
         public AudiofileRepository AudiofileRepository
         {
-            get
-            {
-                if (_audiofileRepository == null)
-                {
-                    _audiofileRepository = new AudiofileRepository(_context);
-                }
-                return _audiofileRepository;
-            }
+            get { return _audiofileRepository ?? (_audiofileRepository = new AudiofileRepository(_context)); }
         }
 
         public RatingRepository RatingRepository
         {
-            get
-            {
-                if (_ratingRepository == null)
-                {
-                    _ratingRepository = new RatingRepository(_context);
-                }
-                return _ratingRepository;
-            }
+            get { return _ratingRepository ?? (_ratingRepository = new RatingRepository(_context)); }
         }
 
         public UserRepository UserRepository
         {
-            get
-            {
-                if (_userRepository == null)
-                {
-                    _userRepository = new UserRepository(_context);
-                }
-                return _userRepository;
-            }
+            get { return _userRepository ?? (_userRepository = new UserRepository(_context)); }
         }
 
         public void Save()

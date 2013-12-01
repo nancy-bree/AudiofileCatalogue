@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Optimization;
+using CI.DAL;
+using WebMatrix.WebData;
 
 namespace CI
 {
@@ -21,6 +23,11 @@ namespace CI
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+
+            CIContext context = new CIContext();
+            if (!WebSecurity.Initialized)
+                WebSecurity.InitializeDatabaseConnection("CIContext",
+                    "User", "ID", "Username", autoCreateTables: true);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,8 +15,6 @@ namespace CI.Entities
         [DisplayName("Логин")]
         public string Username { get; set; }
 
-        [Required]
-        [DisplayName("Пароль")]
-        public string Password { get; set; }
+        public virtual ICollection<Rating> Votes { get; set; }
     }
 }

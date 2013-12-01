@@ -1,0 +1,95 @@
+﻿@model PagedList.IPagedList<CI.Entities.Audiofile>
+@using PagedList.Mvc
+
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Управление аудиофайлами";
+}
+
+<div class="page-header center">
+  <h1>@ViewBag.Title</h1>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="width: 30%">Название</th>
+            <th style="width: 20%">Автор</th>
+            <th style="width: 15%">Жанр</th>
+            <th style="width: 10%">Год</th>
+            <th style="width: 25%">Действие</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Title
+            </td>
+            <td>
+                @item.Author.Name
+            </td>
+            <td>
+                @item.Genre.Name
+            </td>
+            <td>
+                @item.Year
+            </td>
+            <td id="@item.ID">
+                <div>
+                    @Html.ActionLink("Редактировать", "Edit", "Audiofile"
+                                , new {id = item.ID}
+                                ,new {@class = "btn btn-sm btn-info", role = "button"})
+                    @Html.ActionLink("Удалить", "Delete", "Audiofile"
+                            , new {id = item.ID}, new {@class = "deleteBtn btn btn-sm btn-danger", role = "button"})
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+@Html.PagedListPager(Model, page => Url.Action("Audiofiles", new RouteValueDictionary {{"page", page }}), PagedListRenderOptions.Classic)
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/themes/base/jquery-ui.css")" />
+<script src="@Url.Content("~/Scripts/jquery-ui-1.10.3.min.js")"></script>
+
+<script>
+    $(function () {
+        $(".deleteBtn").click(function (e) {
+            e.preventDefault();
+            pid = $(this).parent().parent().attr("id");
+            $('#dialog-confirm').dialog('open');
+        });
+        $("#dialog-confirm").dialog({
+            open: function (event) {
+                $(".ui-dialog-titlebar-close").hide();
+                $(".ui-dialog-title").hide();
+            },
+            resizable: false,
+            modal: true,
+            autoOpen: false,
+            buttons: {
+                "OK": function () {
+                    deleteRecord(pid);
+                    $("td#" + pid).parent().fadeOut("slow").remove();
+                    $(this).dialog("close");
+                },
+                Cancel: function () {
+                    $(this).dialog("close");
+                }
+            }
+        });
+
+        function deleteRecord(pid) {
+            $.ajax({
+                type: "POST",
+                url: $(".deleteBtn").attr("href"),
+                data: { id: pid }
+            });
+        };
+    });
+</script>
+
+<div id="dialog-confirm">Вы действительно хотите удалить данный аудиофайл?</div>

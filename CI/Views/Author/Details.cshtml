@@ -1,12 +1,11 @@
-﻿@model CI.Entities.Author
-@using CI.Services
+﻿@model CI.ViewModels.AuthorDetailsViewModel
 
 @{
-    ViewBag.Title = Model.Name;
+    ViewBag.Title = Model.AuthorName;
 }
 
 <div class="page-header center">
-  <h1>@Model.Name</h1>
+  <h1>@Model.AuthorName</h1>
 </div>
 
 <div class="container">
@@ -21,22 +20,9 @@ else
 }
     </div>
     <div class="col-md-7">
-        @if (Model.Files.Count > 0)
+        @if (Model.Audiofiles.Count > 0)
         {
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th style="width: 65%">Название</th>
-                    <th style="width: 10%">Год</th>
-                    <th style="width: 25%">Жанр</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.Files) {
-                    @Html.Partial("~/Views/Shared/_ShowAudiofileList.cshtml", item)
-                }
-            </tbody>
-        </table>
+            @Html.Partial("~/Views/Shared/_ShowAudiofileList.cshtml", Model.Audiofiles)
         }
         else
         {
@@ -45,9 +31,4 @@ else
     </div>
 </div>
 
-@*@Html.Partial("~/Views/Shared/_ShowAudiofileList.cshtml")*@
 
-@*<p>
-    @Html.ActionLink("Edit", "Edit", new { id=Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>*@

@@ -1,49 +1,31 @@
-﻿@model CI.Entities.Audiofile
-@*@model PagedList.IPagedList<CI.Entities.Audiofile>*@
-@*@using PagedList.Mvc*@
+﻿@model PagedList.IPagedList<CI.Entities.Audiofile>
+@using PagedList.Mvc
 
-@*@if (Model.Count() > 0)
-{
-    <table class="table table-hover">
-    <thead>
-        <tr>
-            <th style="width: 75%">Название</th>
-            <th style="width: 10%">Год</th>
-            <th style="width: 15%">Жанр</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.ActionLink(item.Title, "Details", "Audiofile", new { id = item.ID}, null)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
-                @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.AuthorID}, null)
-            </td>
-        </tr>
-        }
-    </tbody>
-</table>
-    
-@Html.PagedListPager(Model, page => Url.Action("Index", "Audiofile", new RouteValueDictionary {{"page", page }, {"id", ViewBag.GenreID}}), PagedListRenderOptions.Classic)
-}
-else
-{
-    <p>Файлы данного автора/исполнителя не найдены</p>
-}*@
-
-<tr>
-            <td>
-                @Html.ActionLink(Model.Title, "Details", "Audiofile", new { id = Model.ID}, null)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => Model.Year)
-            </td>
-            <td>
-                @Html.ActionLink(Model.Genre.Name, "Details", "Genre", new { id = Model.AuthorID}, null)
-            </td>
-        </tr>
+<table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 65%">Название</th>
+                    <th style="width: 10%">Год</th>
+                    <th style="width: 25%">Жанр</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink(item.Title, "Details", "Audiofile", new { id = item.ID}, null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.GenreID}, null)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+@Html.PagedListPager(Model, 
+                    page => Url.Action("Details", "Author", new RouteValueDictionary {{"page", page }, {"id", ViewBag.AthorID}})
+                    , PagedListRenderOptions.Classic)
