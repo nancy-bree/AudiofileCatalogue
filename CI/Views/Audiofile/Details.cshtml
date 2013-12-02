@@ -22,5 +22,76 @@
             <p><b>Описание:</b> @Html.DisplayFor(item => Model.Description)</p>
         }
     </div>
-    <div class="col-md-6"><audio src="@Url.Content(String.Concat("~/_uploads/audio/", Model.Filename))" preload="none" type="audio/mpeg"/></div>
+    <div class="col-md-6">
+        <div class="col-md-6"><audio src="@Url.Content(String.Concat("~/_uploads/audio/", Model.Filename))" preload="none" type="audio/mpeg"/></div>
+    </div>
 </div>
+ <div class="row" id="@Model.ID" data-currentuserid ="@WebSecurity.CurrentUserId" data-hasvotedurl="@Url.Action("HasVoted", "Rating")" data-votelogic="@Url.Action("AddRemoveVote", "Rating")">
+                <div class="vote-span"><!-- voting-->
+                    <div class="vote" data-action="vote" title="">
+                        <span class="glyphicon glyphicon-heart"/>
+                    </div><!--vote up-->
+                    <div class="vote-score" data-score="@Model.Votes.Count">@Model.Votes.Count</div>
+                </div>
+            </div>
+
+<script>
+    $(function () {
+        var currentUserId = $(".row").data("currentuserid");
+            var self = $(".row");
+            var span = self.find(".vote-span").find("span");
+            if (currentUserId == -1) {
+                span.hide(); //hide heart
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    url: $(".row").data("hasvotedurl"),
+                    data: { userId: currentUserId, audiofileId: self.attr("id") },
+                    success: function (data) {
+                        if (data.result) { //show liked heart
+                            //span.removeClass("glyphicon-heart-empty");
+                            span.addClass("liked");
+                        }
+                    }
+                });
+            }
+        });
+
+    $(function () {
+        $.ajaxSetup({
+            url: $(".row").data("votelogic"),
+            type: 'POST',
+            cache: 'false'
+        });
+
+        $('.vote').click(function () {
+            var self = $(this);
+            var span = self.find("span");
+            var currentUserId = $(".row").data("currentuserid");
+            var parent = self.parent().parent();
+            var audiofileid = parent.attr('id');
+            var score = parent.find('.vote-score').data("score");
+            if (span.hasClass("liked")) { // if already voted
+                $.ajax({
+                    data: { userId: currentUserId, audiofileId: audiofileid, action: "remove" },
+                    success: function () {
+                        parent.find('.vote-score').html(--score).data('score', score);
+                        span.removeClass("liked");
+                        //span.addClass("glyphicon-heart-empty");
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    data: { userId: currentUserId, audiofileId: audiofileid, action: "add" },
+                    success: function () {
+                        parent.find('.vote-score').html(++score).data('score', +score);
+                        //span.removeClass("glyphicon-heart-empty");
+                        span.addClass("liked");
+                    }
+                });
+            }
+        });
+    });
+</script>

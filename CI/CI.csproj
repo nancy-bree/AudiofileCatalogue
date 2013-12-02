@@ -162,6 +162,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GenreController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RatingController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Services\FileService.cs" />
@@ -315,6 +316,7 @@
     <Content Include="Views\Admin\Audiofiles.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Admin\Authors.cshtml" />
+    <Content Include="Views\Shared\_PopularAudiofiles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\audio\" />

@@ -1,0 +1,39 @@
+﻿@model PagedList.IPagedList<CI.Entities.Audiofile>
+@using PagedList.Mvc
+
+<div class="page-header center">
+  <h1>Популярные аудиофайлы</h1>
+</div>
+
+<table class="table table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 10%">Рейтинг</th>
+                    <th style="width: 55%">Название</th>
+                    <th style="width: 10%">Год</th>
+                    <th style="width: 25%">Жанр</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <b>@item.Votes.Count</b>
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Title, "Details", "Audiofile", new { id = item.ID}, null)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Year)
+                        </td>
+                        <td>
+                            @Html.ActionLink(item.Genre.Name, "Details", "Genre", new { id = item.GenreID}, null)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+@Html.PagedListPager(Model, 
+                    page => Url.Action("Index", "Home", new RouteValueDictionary {{"page", page }})
+                    , PagedListRenderOptions.Classic)

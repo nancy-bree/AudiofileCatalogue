@@ -1,10 +1,10 @@
-﻿@{
+﻿@model PagedList.IPagedList<CI.Entities.Audiofile>
+@using PagedList.Mvc
+
+@{
     ViewBag.Title = "Каталог аудиофайлов";
 }
 
-<p>
-    @Html.ActionLink("Список всех аудиофайлов", "Index", "Audiofile")<br />
-    @Html.ActionLink("Добавить аудиофайл", "Upload", "Audiofile")<br />
-    @Html.ActionLink("Добавить автора/исполнителя", "Create", "Author")<br />
-    @Html.ActionLink("Добавить жанр", "Create", "Genre")<br />
-</p>
+@{
+    Html.RenderPartial("_PopularAudiofiles", Model);
+}

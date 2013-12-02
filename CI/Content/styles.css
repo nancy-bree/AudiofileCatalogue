@@ -75,3 +75,22 @@ input[type="checkbox"].input-validation-error {
 code {
   font-size: 80%;
 }
+
+/* voting style */
+.vote-span{
+  margin: 5px auto;
+  display: table;
+}
+.vote, .vote-score{
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  text-align: center;
+  color: #F7C5DE;
+  font-size: 4em;
+  display: inline;
+}
+.vote-score{cursor: text; font-weight: bold;}
+
+.liked, .vote-score {
+    color: #DB0A72;
+}
