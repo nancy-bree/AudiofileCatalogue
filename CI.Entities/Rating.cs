@@ -1,7 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace CI.Entities
 {
+    [Serializable]
     public class Rating
     {
         [Key]

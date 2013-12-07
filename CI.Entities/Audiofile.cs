@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CI.Entities
 {
+    [Serializable]
     public class Audiofile
     {
         [Key]
